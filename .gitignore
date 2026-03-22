@@ -20,4 +20,6 @@ __pycache__/
 Thumbs.db
 
 # Jupyter notebooks checkpoints
-.ipynb_checkpoints/
+.ipynb_checkpoints/model/*.zip
+model/*.csv
+model/requirements_check.txt
