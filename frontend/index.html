@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASL Recognition</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #1a1a2e;
+            color: white;
+        }
+        h1 { margin-bottom: 20px; }
+        video, canvas {
+            border: 2px solid #fff;
+            border-radius: 8px;
+            margin: 10px;
+        }
+        canvas { display: none; }
+        button {
+            margin: 10px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #e94560;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+        #result {
+            font-size: 48px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ASL Sign Recognition</h1>
+    <video id="video" width="400" height="300" autoplay></video>
+    <canvas id="canvas" width="400" height="300"></canvas>
+    <button id="toggleBtn" onclick="toggleLive()">Start Live</button>
+    <div id="result">-</div>
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Start webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => { video.srcObject = stream; })
+            .catch(err => { alert('Webcam error: ' + err); });
+
+        async function capture() {
+            // Draw current video frame to canvas
+            ctx.drawImage(video, 0, 0, 400, 300);
+
+            // Convert canvas to blob and send to backend
+            canvas.toBlob(async (blob) => {
+                const formData = new FormData();
+                formData.append('file', blob, 'snapshot.jpg');
+                const response = await fetch('http://localhost:8000/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                document.getElementById('result').textContent = 'Letter: ' + data.letter;
+            }, 'image/jpeg');
+        }
+
+        let liveInterval = null;
+
+        function toggleLive() {
+            const btn = document.getElementById('toggleBtn');
+            if (liveInterval) {
+                clearInterval(liveInterval);
+                liveInterval = null;
+                btn.textContent = 'Start Live';
+            } else {
+                liveInterval = setInterval(capture, 1500);
+                btn.textContent = 'Stop Live';
+            }
+        }
+    </script>
+</body>
+</html>

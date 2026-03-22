@@ -1,0 +1,23 @@
+# Virtual environment
+venv/
+
+# Model weights
+*.pth
+
+# Generated figure images
+model/*.png
+
+# Figure generation scripts
+model/plot_*.py
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
