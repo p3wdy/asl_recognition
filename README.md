@@ -18,9 +18,7 @@ asl_recognition/
 ├── model/
 │   ├── train.py                        # CNN training script
 │   ├── evaluate.py                     # Confusion matrix and classification report
-│   ├── asl_model.pth                   # Saved model weights (not tracked)
-│   ├── sign_mnist_train.csv            # Training data
-│   └── sign_mnist_test.csv             # Test data
+│   └── asl_model.pth                   # Saved model weights (not tracked)
 ├── backend/
 │   ├── main.py                         # FastAPI backend with /predict endpoint
 │   ├── main_backup.py                  # Backup version without MediaPipe
@@ -92,7 +90,7 @@ A custom CNN implemented in PyTorch:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/asl_recognition.git
+git clone https://github.com/p3wdy/asl_recognition.git
 cd asl_recognition
 ```
 
@@ -114,7 +112,13 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Download MediaPipe hand landmark model
+### 4. Download the dataset
+
+Download the Sign Language MNIST dataset from Kaggle and place both CSV files inside `model/`:
+
+https://www.kaggle.com/datasets/datamunge/sign-language-mnist
+
+### 5. Download MediaPipe hand landmark model
 
 Download `hand_landmarker.task` from the MediaPipe documentation and place it inside `backend/`.
 
